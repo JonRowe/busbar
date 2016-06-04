@@ -9,6 +9,11 @@ defmodule BusBar.Mains do
     { :ok, pid }
   end
 
+  def notify(event, data \\ nil) do
+    bus_process
+    |> GenEvent.notify({event, data})
+  end
+
   def attach(listener, args \\ []) do
     bus_process
     |> GenEvent.add_handler(listener, args)
