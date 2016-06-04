@@ -10,6 +10,7 @@ defmodule BusBar.Mixfile do
       start_permanent: Mix.env == :prod,
       deps:            deps,
       description:     description,
+      package:         package,
     ]
   end
 
@@ -30,5 +31,15 @@ defmodule BusBar.Mixfile do
     """
     A simple event bus.
     """
+  end
+
+  defp package do
+    [
+      name:        :bus_bar,
+      files:       ["lib", "mix.exs", "README.md", "LICENSE.md"],
+      maintainers: ["Jon Rowe"],
+      licenses:    ["MIT"],
+      links:       %{ "GitHub" => "https://github.com/JonRowe/busbar" },
+    ]
   end
 end
