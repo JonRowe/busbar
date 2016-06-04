@@ -19,6 +19,10 @@ defmodule BusBar.Mains do
     |> GenEvent.add_handler(listener, args)
   end
 
+  def sync(event) do
+    bus_process |> GenEvent.sync_notify event
+  end
+
   defp bus_process do
     Agent.get(__MODULE__, fn (pid) -> pid end)
   end

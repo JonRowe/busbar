@@ -5,6 +5,22 @@ defmodule BusBar do
 
   use Application
 
+  def attach(listener, args \\ []) do
+    BusBar.Mains.attach listener, args
+  end
+
+  def notify(event, data) do
+    BusBar.Mains.notify event, data
+  end
+
+  def notify_to(data, event) do
+    BusBar.Mains.notify event, data
+  end
+
+  def sync(event) do
+    BusBar.Mains.sync(event)
+  end
+
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
