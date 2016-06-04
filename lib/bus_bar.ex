@@ -10,6 +10,7 @@ defmodule BusBar do
 
     Supervisor.start_link(
       [
+        worker(__MODULE__.Mains, [])
       ],
       [
         strategy: :one_for_one, name: BusBar.Supervisor
