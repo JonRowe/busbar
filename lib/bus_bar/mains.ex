@@ -9,4 +9,13 @@ defmodule BusBar.Mains do
     { :ok, pid }
   end
 
+  def attach(listener, args \\ []) do
+    bus_process
+    |> GenEvent.add_handler(listener, args)
+  end
+
+  defp bus_process do
+    Agent.get(__MODULE__, fn (pid) -> pid end)
+  end
+
 end
