@@ -1,7 +1,5 @@
 defmodule BusBar.Mains do
-  @moduledoc """
-  The mains is responsible for connecting events.
-  """
+  @moduledoc false
 
   def start_link do
     { :ok, pid } = GenEvent.start_link([])
