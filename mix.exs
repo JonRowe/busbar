@@ -23,8 +23,9 @@ defmodule BusBar.Mixfile do
 
   defp deps do
     [
-      { :dogma,  "~> 0.1.5", only: :dev },
-      { :ex_doc, ">= 0.0.0", only: :dev },
+      { :dogma,   "~> 0.1.5", only: :dev },
+      { :ex_doc,  ">= 0.0.0", only: :dev },
+      { :earmark, ">= 0.0.0", only: :dev },
     ]
   end
 
