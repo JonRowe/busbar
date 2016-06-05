@@ -5,14 +5,28 @@ defmodule BusBar do
 
   use Application
 
+  @doc """
+  Attach a listener to the bus.
+  """
   def attach(listener, args \\ []) do
     BusBar.Mains.attach listener, args
   end
 
+  @doc """
+  Notify the bus of an event with data.
+  """
   def notify(event, data) do
     BusBar.Mains.notify event, data
   end
 
+  @doc """
+  Notification for use in pipelines.
+
+  Example:
+  data
+  |> process_data
+  |> BusBar.notify_to :some_event
+  """
   def notify_to(data, event) do
     BusBar.Mains.notify event, data
   end
