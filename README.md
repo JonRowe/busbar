@@ -1,4 +1,5 @@
 # BusBar
+[![Build Status](https://travis-ci.org/JonRowe/busbar.svg?branch=master)](https://travis-ci.org/JonRowe/busbar)
 
 Simple event bus for elixir.
 
