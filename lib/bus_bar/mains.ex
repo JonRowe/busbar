@@ -18,7 +18,7 @@ defmodule BusBar.Mains do
   end
 
   def sync(event) do
-    bus_process |> GenEvent.sync_notify event
+    bus_process |> GenEvent.sync_notify(event)
   end
 
   defp bus_process do
