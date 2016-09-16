@@ -3,6 +3,24 @@
 
 Simple event bus for elixir.
 
+## Usage
+
+```Elixir
+module MyListener do
+  use GenEvent
+  require Logger
+
+  def handle_event({:some_event, message }, parent) do
+    Logger.info "Notified of #{message}"
+    { :ok, parent }
+  end
+end
+
+BusBar.attach MyListener
+
+BusBar.notify :some_event, 'my_data'
+```
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
