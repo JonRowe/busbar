@@ -19,6 +19,14 @@ defmodule BusBar.MainsTest do
     end
   end
 
+  defmodule ErrorTestHandler do
+    use GenEvent
+
+    def handle_event({:notify_test, :error}, _) do
+      raise "boom"
+    end
+  end
+
   defmodule OtherTestHandler do
     use GenEvent
     require Logger
@@ -82,5 +90,19 @@ defmodule BusBar.MainsTest do
     end)
     assert log =~ ~r/Notify test success 2/
     assert log =~ ~r/Other notify test success 2/
+  end
+
+  test "notify will transmit events via genevent to multiple listeners even " <>
+       "if one errors" do
+    log = capture_log(fn ->
+      pid = Agent.get(BusBar.Mains, fn (pid) -> pid end)
+      GenEvent.add_handler pid, TestHandler, []
+      GenEvent.add_handler pid, ErrorTestHandler, []
+      GenEvent.add_handler pid, OtherTestHandler, []
+      BusBar.Mains.notify :notify_test, :error
+      GenEvent.sync_notify pid, :notify_test
+    end)
+    assert log =~ ~r/Notify test success error/
+    assert log =~ ~r/Other notify test success error/
   end
 end
