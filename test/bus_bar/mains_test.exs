@@ -70,7 +70,7 @@ defmodule BusBar.MainsTest do
     assert log =~ ~r/Other attach test success 2/
   end
 
-  test "notify will transmit events via genevent" do
+  test "#notify will transmit events via genevent" do
     log = capture_log(fn ->
       pid = Agent.get(BusBar.Mains, fn (pid) -> pid end)
       GenEvent.add_handler pid, TestHandler, []
