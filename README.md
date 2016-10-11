@@ -28,7 +28,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
   1. Add bus_bar to your list of dependencies in `mix.exs`:
 
         def deps do
-          [{:bus_bar, "~> 0.0.1"}]
+          [{:bus_bar, "~> 0.0.2"}]
         end
 
   2. Ensure bus_bar is started before your application:
