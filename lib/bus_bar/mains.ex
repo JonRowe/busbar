@@ -17,6 +17,10 @@ defmodule BusBar.Mains do
     |> GenEvent.add_handler(listener, args)
   end
 
+  def listeners do
+    bus_process |> GenEvent.which_handlers
+  end
+
   def sync(event) do
     bus_process |> GenEvent.sync_notify(event)
   end

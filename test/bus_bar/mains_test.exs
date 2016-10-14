@@ -40,7 +40,6 @@ defmodule BusBar.MainsTest do
       Logger.info "Other notify test success #{data}"
       { :ok, parent }
     end
-
   end
 
   test "#start_link stores a gen event pid" do
@@ -104,5 +103,11 @@ defmodule BusBar.MainsTest do
     end)
     assert log =~ ~r/Notify test success error/
     assert log =~ ~r/Other notify test success error/
+  end
+
+  test "listeners will return all attached handlers" do
+    pid = Agent.get(BusBar.Mains, fn (pid) -> pid end)
+    GenEvent.add_handler pid, TestHandler, []
+    assert BusBar.Mains.listeners, [TestHandler]
   end
 end

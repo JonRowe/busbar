@@ -13,6 +13,13 @@ defmodule BusBar do
   end
 
   @doc """
+  Returns a list of currently attached listeners.
+  """
+  def listeners do
+    BusBar.Mains.listeners
+  end
+
+  @doc """
   Notify the bus of an event with data.
   """
   def notify(event, data) do

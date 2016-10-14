@@ -33,4 +33,8 @@ defmodule BusBarTest do
     end)
     assert log =~ ~r/Notify api test success/
   end
+
+  test "#listeners" do
+    assert BusBar.listeners, [TestHandler]
+  end
 end
