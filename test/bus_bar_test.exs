@@ -16,6 +16,9 @@ defmodule BusBarTest do
 
   setup do
     BusBar.attach TestHandler
+    on_exit fn ->
+      BusBar.detach TestHandler
+    end
   end
 
   test "#notify" do
