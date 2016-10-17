@@ -3,7 +3,7 @@ defmodule BusBar.Mains do
 
   def start_link do
     { :ok, pid } = GenEvent.start_link([])
-    Agent.start_link(fn -> pid end, name: __MODULE__)
+    Agent.start(fn -> pid end, name: __MODULE__)
     { :ok, pid }
   end
 
