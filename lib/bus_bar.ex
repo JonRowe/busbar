@@ -13,6 +13,13 @@ defmodule BusBar do
   end
 
   @doc """
+  Detach a listener from the bus.
+  """
+  def detach(listener, args \\ []) do
+    BusBar.Mains.detach listener, args
+  end
+
+  @doc """
   Returns a list of currently attached listeners.
   """
   def listeners do

@@ -17,6 +17,11 @@ defmodule BusBar.Mains do
     |> GenEvent.add_handler(listener, args)
   end
 
+  def detach(listener, args \\ []) do
+    bus_process
+    |> GenEvent.remove_handler(listener, args)
+  end
+
   def listeners do
     bus_process |> GenEvent.which_handlers
   end

@@ -69,6 +69,13 @@ defmodule BusBar.MainsTest do
     assert log =~ ~r/Other attach test success 2/
   end
 
+  test "#detach will remove a listener" do
+    pid = Agent.get(BusBar.Mains, fn (pid) -> pid end)
+    GenEvent.add_handler pid, TestHandler, []
+    BusBar.Mains.detach TestHandler
+    assert GenEvent.which_handlers(pid), []
+  end
+
   test "#notify will transmit events via genevent" do
     log = capture_log(fn ->
       pid = Agent.get(BusBar.Mains, fn (pid) -> pid end)
