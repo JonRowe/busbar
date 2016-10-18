@@ -1,5 +1,8 @@
 defmodule BusBar.Mains do
-  @moduledoc false
+  @moduledoc """
+  The Mains module implements an event manager using Agent and GenEvent.
+  """
+
   require Logger
 
   def start_link do
