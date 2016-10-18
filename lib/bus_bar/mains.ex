@@ -19,16 +19,16 @@ defmodule BusBar.Mains do
     |> GenEvent.notify({event, data})
   end
 
-  def attach(listener, args \\ []) do
+  def attach(listener) do
     Logger.debug "BusBar ATTACH #{listener}"
     :ok = bus_process
-    |> GenEvent.add_handler(listener, args)
+    |> GenEvent.add_mon_handler(listener, [])
   end
 
-  def detach(listener, args \\ []) do
+  def detach(listener) do
     Logger.debug "BusBar DETACH #{listener}"
     bus_process
-    |> GenEvent.remove_handler(listener, args)
+    |> GenEvent.remove_handler(listener, [])
   end
 
   def listeners do

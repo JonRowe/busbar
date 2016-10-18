@@ -8,15 +8,15 @@ defmodule BusBar do
   @doc """
   Attach a listener to the bus.
   """
-  def attach(listener, args \\ []) do
-    BusBar.Mains.attach listener, args
+  def attach(listener) do
+    BusBar.Mains.attach listener
   end
 
   @doc """
   Detach a listener from the bus.
   """
-  def detach(listener, args \\ []) do
-    BusBar.Mains.detach listener, args
+  def detach(listener) do
+    BusBar.Mains.detach listener
   end
 
   @doc """
