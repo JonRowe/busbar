@@ -4,8 +4,9 @@ defmodule BusBar.Mains do
 
   def start_link do
     { :ok, pid } = GenEvent.start_link([])
-    Logger.debug "Started BusBar GenEvent at #{inspect pid}"
     { :ok, agent_pid } = Agent.start_link(fn -> pid end, name: __MODULE__)
+    Logger.debug "Started BusBar GenEvent at #{inspect pid} " <>
+                 "with Agent #{inspect agent_pid}."
     { :ok, pid }
   end
 
