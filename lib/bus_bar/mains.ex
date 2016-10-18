@@ -12,13 +12,13 @@ defmodule BusBar.Mains do
 
   def notify(event, data \\ nil) do
     Logger.debug "BusBar NOTIFY #{event}"
-    bus_process
+    :ok = bus_process
     |> GenEvent.notify({event, data})
   end
 
   def attach(listener, args \\ []) do
     Logger.debug "BusBar ATTACH #{listener}"
-    bus_process
+    :ok = bus_process
     |> GenEvent.add_handler(listener, args)
   end
 
@@ -34,7 +34,7 @@ defmodule BusBar.Mains do
 
   def sync(event) do
     Logger.debug "BusBar SYNC #{event}"
-    bus_process |> GenEvent.sync_notify(event)
+    :ok = bus_process |> GenEvent.sync_notify(event)
   end
 
   defp bus_process do

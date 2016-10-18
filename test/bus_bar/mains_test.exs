@@ -64,6 +64,7 @@ defmodule BusBar.MainsTest do
       BusBar.Mains.attach OtherTestHandler
       GenEvent.notify pid, {:attach_test, '2'}
       GenEvent.sync_notify pid, :attach_test
+      GenEvent.remove_handler pid, TestHandler, []
     end)
     assert log =~ ~r/Attach test success 2/
     assert log =~ ~r/Other attach test success 2/
@@ -82,6 +83,7 @@ defmodule BusBar.MainsTest do
       GenEvent.add_handler pid, TestHandler, []
       BusBar.Mains.notify :notify_test, 1
       GenEvent.sync_notify pid, :notify_test
+      GenEvent.remove_handler pid, TestHandler, []
     end)
     assert log =~ ~r/Notify test success/
   end
@@ -116,5 +118,6 @@ defmodule BusBar.MainsTest do
     pid = Agent.get(BusBar.Mains, fn (pid) -> pid end)
     GenEvent.add_handler pid, TestHandler, []
     assert BusBar.Mains.listeners, [TestHandler]
+    GenEvent.remove_handler pid, TestHandler, []
   end
 end
