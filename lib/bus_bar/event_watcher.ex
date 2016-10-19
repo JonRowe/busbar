@@ -7,12 +7,11 @@ defmodule BusBar.EventWatcher do
   require Logger
 
   def start_link(handler) do
-    GenServer.start_link(__MODULE__, handler)
-    { :ok, handler }
+    { :ok, _child } = GenServer.start_link(__MODULE__, handler)
   end
 
   def init(handler) do
-    BusBar.EventManager.attach handler
+    :ok = BusBar.EventManager.attach handler
     { :ok, handler }
   end
 

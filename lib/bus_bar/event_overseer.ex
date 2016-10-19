@@ -17,7 +17,8 @@ defmodule BusBar.EventOverseer do
   end
 
   def monitor(handler) do
-    Supervisor.start_child(:bus_bar_overseer, [handler])
+    { :ok, _child } = Supervisor.start_child(:bus_bar_overseer, [handler])
+    :ok
   end
 
 end
