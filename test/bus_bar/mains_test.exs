@@ -58,6 +58,7 @@ defmodule BusBar.MainsTest do
       GenEvent.notify :bus_bar, {:attach_test, '2'}
       GenEvent.sync_notify :bus_bar, :attach_test
       GenEvent.remove_handler :bus_bar, TestHandler, []
+      GenEvent.remove_handler :bus_bar, OtherTestHandler, []
     end)
     assert log =~ ~r/Attach test success 2/
     assert log =~ ~r/Other attach test success 2/
@@ -85,6 +86,8 @@ defmodule BusBar.MainsTest do
       GenEvent.add_handler :bus_bar, OtherTestHandler, []
       BusBar.Mains.notify :notify_test, 2
       GenEvent.sync_notify :bus_bar, :notify_test
+      GenEvent.remove_handler :bus_bar, TestHandler, []
+      GenEvent.remove_handler :bus_bar, OtherTestHandler, []
     end)
     assert log =~ ~r/Notify test success 2/
     assert log =~ ~r/Other notify test success 2/
@@ -98,6 +101,9 @@ defmodule BusBar.MainsTest do
       GenEvent.add_handler :bus_bar, OtherTestHandler, []
       BusBar.Mains.notify :notify_test, :error
       GenEvent.sync_notify :bus_bar, :notify_test
+      GenEvent.remove_handler :bus_bar, TestHandler, []
+      GenEvent.remove_handler :bus_bar, ErrorTestHandler, []
+      GenEvent.remove_handler :bus_bar, OtherTestHandler, []
     end)
     assert log =~ ~r/Notify test success error/
     assert log =~ ~r/Other notify test success error/
