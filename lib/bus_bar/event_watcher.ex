@@ -7,16 +7,16 @@ defmodule BusBar.EventWatcher do
   use GenServer
   require Logger
 
-  def start_link(manager) do
+  def start_link do
     { :ok, pid } = GenServer.start_link(
-                     __MODULE__, manager, [name: :bus_bar_watcher]
+                     __MODULE__, :bus_bar_events, [name: :bus_bar_watcher]
                    )
     { :ok, pid }
   end
 
-  def init(manager) do
-    Process.monitor(manager)
-    { :ok, manager }
+  def init(state) do
+    Process.monitor(:bus_bar_events)
+    { :ok, state }
   end
 
   def handle_info({:DOWN, _, _, {BusBar.EventManager, _}, reason}, source) do
