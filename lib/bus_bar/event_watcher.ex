@@ -1,7 +1,7 @@
-defmodule BusBar.Meter do
+defmodule BusBar.EventWatcher do
   @moduledoc """
-  The BusBar.Meter module implement a watcher for EventManager events in order
-  to handle fault tolerance.
+  The BusBar.EventWatcher module observes events in order to
+  handle fault tolerance.
   """
 
   use GenServer
