@@ -45,8 +45,7 @@ defmodule BusBar.MainsTest do
   test "#attach will subscribe to gen event" do
     log = capture_log(fn ->
       BusBar.Mains.attach TestHandler
-      GenEvent.notify :bus_bar, {:attach_test, '1'}
-      GenEvent.sync_notify :bus_bar, :attach_test
+      GenEvent.sync_notify :bus_bar, {:attach_test, '1'}
     end)
     assert log =~ ~r/Attach test success 1/
   end
@@ -55,8 +54,7 @@ defmodule BusBar.MainsTest do
     log = capture_log(fn ->
       BusBar.Mains.attach TestHandler
       BusBar.Mains.attach OtherTestHandler
-      GenEvent.notify :bus_bar, {:attach_test, '2'}
-      GenEvent.sync_notify :bus_bar, :attach_test
+      GenEvent.sync_notify :bus_bar, {:attach_test, '2'}
       GenEvent.remove_handler :bus_bar, TestHandler, []
       GenEvent.remove_handler :bus_bar, OtherTestHandler, []
     end)
@@ -74,7 +72,6 @@ defmodule BusBar.MainsTest do
     log = capture_log(fn ->
       GenEvent.add_handler :bus_bar, TestHandler, []
       BusBar.Mains.notify :notify_test, 1
-      GenEvent.sync_notify :bus_bar, :notify_test
       GenEvent.remove_handler :bus_bar, TestHandler, []
     end)
     assert log =~ ~r/Notify test success/
@@ -100,7 +97,42 @@ defmodule BusBar.MainsTest do
       GenEvent.add_handler :bus_bar, ErrorTestHandler, []
       GenEvent.add_handler :bus_bar, OtherTestHandler, []
       BusBar.Mains.notify :notify_test, :error
-      GenEvent.sync_notify :bus_bar, :notify_test
+      GenEvent.remove_handler :bus_bar, TestHandler, []
+      GenEvent.remove_handler :bus_bar, ErrorTestHandler, []
+      GenEvent.remove_handler :bus_bar, OtherTestHandler, []
+    end)
+    assert log =~ ~r/Notify test success error/
+    assert log =~ ~r/Other notify test success error/
+  end
+
+  test "#sync_notify will transmit events via genevent" do
+    log = capture_log(fn ->
+      GenEvent.add_handler :bus_bar, TestHandler, []
+      BusBar.Mains.sync_notify :notify_test, 1
+      GenEvent.remove_handler :bus_bar, TestHandler, []
+    end)
+    assert log =~ ~r/Notify test success/
+  end
+
+  test "#sync_notify will transmit events via genevent to multiple listeners" do
+    log = capture_log(fn ->
+      GenEvent.add_handler :bus_bar, TestHandler, []
+      GenEvent.add_handler :bus_bar, OtherTestHandler, []
+      BusBar.Mains.sync_notify :notify_test, 2
+      GenEvent.remove_handler :bus_bar, TestHandler, []
+      GenEvent.remove_handler :bus_bar, OtherTestHandler, []
+    end)
+    assert log =~ ~r/Notify test success 2/
+    assert log =~ ~r/Other notify test success 2/
+  end
+
+  test "#sync_notify will transmit events via genevent to multiple " <>
+       "listeners even if one errors" do
+    log = capture_log(fn ->
+      GenEvent.add_handler :bus_bar, TestHandler, []
+      GenEvent.add_handler :bus_bar, ErrorTestHandler, []
+      GenEvent.add_handler :bus_bar, OtherTestHandler, []
+      BusBar.Mains.sync_notify :notify_test, :error
       GenEvent.remove_handler :bus_bar, TestHandler, []
       GenEvent.remove_handler :bus_bar, ErrorTestHandler, []
       GenEvent.remove_handler :bus_bar, OtherTestHandler, []

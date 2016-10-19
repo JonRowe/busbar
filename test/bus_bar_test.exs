@@ -24,7 +24,6 @@ defmodule BusBarTest do
   test "#notify" do
     log = capture_log(fn ->
       BusBar.notify :notify_test, [:some, :data]
-      BusBar.sync :notify_test
     end)
     assert log =~ ~r/Notify api test success/
   end
@@ -32,7 +31,6 @@ defmodule BusBarTest do
   test "#notify_to" do
     log = capture_log(fn ->
       [:some, :data] |> BusBar.notify_to(:notify_test)
-      BusBar.sync :notify_test
     end)
     assert log =~ ~r/Notify api test success/
   end

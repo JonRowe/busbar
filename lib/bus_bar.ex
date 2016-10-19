@@ -46,10 +46,11 @@ defmodule BusBar do
   end
 
   @doc """
-  Wait until all handlers have processed event.
+  Notify the bus of an event with data, and waituntil all handlers have
+  processed the event.
   """
-  def sync(event) do
-    BusBar.Mains.sync(event)
+  def sync_notify(event, data) do
+    BusBar.Mains.sync_notify(event, data)
   end
 
   @doc false
