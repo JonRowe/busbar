@@ -4,19 +4,16 @@ defmodule BusBar.EventWatcher do
   handle fault tolerance.
   """
 
-  use GenServer
   require Logger
 
-  def start_link do
-    { :ok, pid } = GenServer.start_link(
-                     __MODULE__, :bus_bar_events, [name: :bus_bar_watcher]
-                   )
-    { :ok, pid }
+  def start_link(handler) do
+    GenServer.start_link(__MODULE__, handler)
+    { :ok, handler }
   end
 
-  def init(state) do
-    Process.monitor(:bus_bar_events)
-    { :ok, state }
+  def init(handler) do
+    BusBar.EventManager.attach handler
+    { :ok, handler }
   end
 
   def handle_info({:DOWN, _, _, {BusBar.EventManager, _}, reason}, source) do
@@ -25,10 +22,18 @@ defmodule BusBar.EventWatcher do
     {:stop, 'BusBar down.', []}
   end
 
-  def handle_info({:gen_event_EXIT, handler, reason}, manager) do
-    Logger.debug "Restarting #{inspect handler} due to #{inspect reason}."
+  def handle_info({:gen_event_EXIT, _handler, :normal}, state) do
+    { :noreply, state }
+  end
+
+  def handle_info({:gen_event_EXIT, _handler, :shutdown}, state) do
+    { :noreply, state }
+  end
+
+  def handle_info({:gen_event_EXIT, handler, _reason}, state) do
+    Logger.debug "Restarting #{inspect handler}."
     BusBar.EventManager.attach handler
-    { :noreply, manager }
+    { :noreply, state }
   end
 
 end

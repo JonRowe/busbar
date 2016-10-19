@@ -11,6 +11,7 @@ defmodule BusBar.Supervisor do
   def init(_) do
     [
       worker(BusBar.EventManager, []),
+      supervisor(BusBar.EventOverseer, []),
     ]
     |> supervise(strategy: :one_for_one)
   end

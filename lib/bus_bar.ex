@@ -9,7 +9,7 @@ defmodule BusBar do
   Attach a listener to the bus.
   """
   def attach(listener) do
-    BusBar.EventManager.attach listener
+    BusBar.EventOverseer.monitor listener
   end
 
   @doc """
