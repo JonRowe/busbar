@@ -29,7 +29,8 @@ defmodule BusBar.EventWatcherTest do
       BusBar.attach TestHandler
       BusBar.attach ErrorTestHandler
       BusBar.sync_notify :notify_test, 1
-      Process.sleep 1
+      # todo fix this with message passing
+      :timer.sleep 1
       BusBar.sync_notify :notify_test, 2
       BusBar.detach TestHandler
       BusBar.detach ErrorTestHandler
