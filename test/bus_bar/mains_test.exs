@@ -79,7 +79,7 @@ defmodule BusBar.MainsTest do
     assert log =~ ~r/Notify test success/
   end
 
-  test "notify will transmit events via genevent to multiple listeners" do
+  test "#notify will transmit events via genevent to multiple listeners" do
     log = capture_log(fn ->
       GenEvent.add_handler :bus_bar, TestHandler, []
       GenEvent.add_handler :bus_bar, OtherTestHandler, []
@@ -90,8 +90,8 @@ defmodule BusBar.MainsTest do
     assert log =~ ~r/Other notify test success 2/
   end
 
-  test "notify will transmit events via genevent to multiple listeners even " <>
-       "if one errors" do
+  test "#notify will transmit events via genevent to multiple listeners " <>
+       "even if one errors" do
     log = capture_log(fn ->
       GenEvent.add_handler :bus_bar, TestHandler, []
       GenEvent.add_handler :bus_bar, ErrorTestHandler, []
