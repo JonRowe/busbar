@@ -54,15 +54,6 @@ defmodule BusBar do
 
   @doc false
   def start(_type, _args) do
-    import Supervisor.Spec, warn: false
-
-    Supervisor.start_link(
-      [
-        worker(__MODULE__.Mains, []),
-      ],
-      [
-        strategy: :one_for_one, name: BusBar.Supervisor
-      ]
-    )
+    BusBar.Supervisor.start_link
   end
 end
