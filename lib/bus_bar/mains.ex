@@ -6,43 +6,31 @@ defmodule BusBar.Mains do
   require Logger
 
   def start_link do
-    { :ok, pid } = GenEvent.start_link([])
-    { :ok, agent_pid } = Agent.start_link(fn -> pid end, name: __MODULE__)
-    { :ok, _ } = BusBar.Meter.start_link(pid)
-    Logger.debug "Started BusBar GenEvent at #{inspect pid} " <>
-                 "with Agent #{inspect agent_pid}."
-    { :ok, pid }
+    GenEvent.start_link([name: :bus_bar])
   end
 
   def notify(event, data \\ nil) do
     Logger.debug "BusBar NOTIFY #{event}"
-    :ok = bus_process
-    |> GenEvent.notify({event, data})
+    :ok = GenEvent.notify(:bus_bar, {event, data})
   end
 
   def attach(listener) do
     Logger.debug "BusBar ATTACH #{listener}"
-    :ok = bus_process
-    |> GenEvent.add_mon_handler(listener, [])
+    :ok = GenEvent.add_mon_handler(:bus_bar, listener, [])
   end
 
   def detach(listener) do
     Logger.debug "BusBar DETACH #{listener}"
-    bus_process
-    |> GenEvent.remove_handler(listener, [])
+    GenEvent.remove_handler(:bus_bar, listener, [])
   end
 
   def listeners do
-    bus_process |> GenEvent.which_handlers
+    GenEvent.which_handlers :bus_bar
   end
 
   def sync(event) do
     Logger.debug "BusBar SYNC #{event}"
-    :ok = bus_process |> GenEvent.sync_notify(event)
-  end
-
-  defp bus_process do
-    Agent.get(__MODULE__, fn (pid) -> pid end)
+    :ok = GenEvent.sync_notify(:bus_bar, event)
   end
 
 end
