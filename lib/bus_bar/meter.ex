@@ -1,32 +1,32 @@
 defmodule BusBar.Meter do
   @moduledoc """
-  The BusBar.Meter module implement a watcher for Mains events in order to
-  handle fault tolerance.
+  The BusBar.Meter module implement a watcher for EventManager events in order
+  to handle fault tolerance.
   """
 
   use GenServer
   require Logger
 
-  def start_link(mains) do
-    { :ok, pid } = GenServer.start_link(__MODULE__, mains)
+  def start_link(manager) do
+    { :ok, pid } = GenServer.start_link(__MODULE__, manager)
     { :ok, pid }
   end
 
-  def init(mains) do
-    Process.monitor(mains)
-    { :ok, mains }
+  def init(manager) do
+    Process.monitor(manager)
+    { :ok, manager }
   end
 
-  def handle_info({:DOWN, _, _, {BusBar.Mains, _}, reason}, source) do
+  def handle_info({:DOWN, _, _, {BusBar.EventManager, _}, reason}, source) do
     Logger.debug "Stopping watching BusBar events due to #{inspect reason} " <>
                  "on #{inspect source}"
     {:stop, 'BusBar down.', []}
   end
 
-  def handle_info({:gen_event_EXIT, handler, reason}, mains) do
+  def handle_info({:gen_event_EXIT, handler, reason}, manager) do
     Logger.debug "Restarting #{inspect handler} due to #{inspect reason}."
-    BusBar.Mains.attach handler
-    { :noreply, mains }
+    BusBar.EventManager.attach handler
+    { :noreply, manager }
   end
 
 end

@@ -10,7 +10,7 @@ defmodule BusBar.Supervisor do
 
   def init(_) do
     [
-      worker(BusBar.Mains, []),
+      worker(BusBar.EventManager, [], [name: :bus_bar_manager]),
     ]
     |> supervise(strategy: :one_for_one)
   end

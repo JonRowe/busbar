@@ -9,28 +9,28 @@ defmodule BusBar do
   Attach a listener to the bus.
   """
   def attach(listener) do
-    BusBar.Mains.attach listener
+    BusBar.EventManager.attach listener
   end
 
   @doc """
   Detach a listener from the bus.
   """
   def detach(listener) do
-    BusBar.Mains.detach listener
+    BusBar.EventManager.detach listener
   end
 
   @doc """
   Returns a list of currently attached listeners.
   """
   def listeners do
-    BusBar.Mains.listeners
+    BusBar.EventManager.listeners
   end
 
   @doc """
   Notify the bus of an event with data.
   """
   def notify(event, data) do
-    BusBar.Mains.notify event, data
+    BusBar.EventManager.notify event, data
   end
 
   @doc """
@@ -42,7 +42,7 @@ defmodule BusBar do
   |> BusBar.notify_to :some_event
   """
   def notify_to(data, event) do
-    BusBar.Mains.notify event, data
+    BusBar.EventManager.notify event, data
   end
 
   @doc """
@@ -50,7 +50,7 @@ defmodule BusBar do
   processed the event.
   """
   def sync_notify(event, data) do
-    BusBar.Mains.sync_notify(event, data)
+    BusBar.EventManager.sync_notify(event, data)
   end
 
   @doc false
