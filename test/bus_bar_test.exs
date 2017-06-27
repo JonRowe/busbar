@@ -49,7 +49,6 @@ defmodule BusBarTest do
     BusBar.notify :not_notify_test, [:some, :data]
   end
 
-  @tag :skip
   test "#sync_notify doesn't block when no matching event" do
     BusBar.sync_notify :not_notify_test, [:some, :data]
   end

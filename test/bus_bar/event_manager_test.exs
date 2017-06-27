@@ -81,7 +81,6 @@ defmodule BusBar.EventManagerTest do
     assert_received {:notify_test, 1}
   end
 
-  @tag :skip
   test "#sync_notify will call handle_event on listeners even if one errors" do
     {:ok, _} = BusBarSuper.add EventHandler, [TestHandler], id: :test
     {:ok, _} = BusBarSuper.add EventHandler, [ErrorTestHandler], id: :error

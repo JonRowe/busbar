@@ -17,12 +17,12 @@ defmodule BusBar.EventHandler do
   end
 
   def handle_call(message, _from, handler) do
-    handler.handle_event(message, self())
+    handle_event(handler, message)
     {:reply, :ok, handler}
   end
 
   def handle_cast(message, handler) do
-    handler.handle_event(message, self())
+    handle_event(handler, message)
     {:noreply, handler}
   end
 
@@ -30,5 +30,24 @@ defmodule BusBar.EventHandler do
   def terminate(reason, handler) do
     Logger.info "Terminating #{handler} due to #{inspect reason}."
     :ok
+  end
+
+  defp handle_event(handler, message) do
+    try do
+      handler.handle_event(message, self())
+    rescue
+      e in RuntimeError -> handle_error(:runtime, handler, e)
+      f in FunctionClauseError -> handle_error(:function, handler, f)
+    end
+  end
+
+  defp handle_error(:runtime, handler, e) do
+    Logger.error "Error occured in #{handler}, #{inspect e}"
+    {:error, e}
+  end
+
+  defp handle_error(:function, handler, e) do
+    Logger.error "Error occured in #{handler}, no function clause #{inspect e}"
+    {:error, e}
   end
 end
