@@ -15,6 +15,7 @@ defmodule BusBar.EventManager do
   def attach(listener) do
     Logger.debug "BusBar ATTACH #{listener}"
     {:ok, _pid} = Supervisor.add(EventHandler, [listener], id: listener)
+    :ok
   end
 
   def detach(listener) do

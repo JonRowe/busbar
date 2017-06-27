@@ -28,7 +28,7 @@ defmodule BusBar.EventManagerTest do
   end
 
   test "#attach will subscribe a handler to the bus" do
-    {:ok, _} = BusBar.EventManager.attach TestHandler
+    :ok = BusBar.EventManager.attach TestHandler
     assert length(BusBarSuper.children) == 1
     :ok = BusBarSuper.remove TestHandler
   end
