@@ -5,12 +5,17 @@ defmodule BusBarTest do
   import ExUnit.CaptureLog
 
   defmodule TestHandler do
-    use GenEvent
     require Logger
 
-    def handle_event({:notify_test, _ }, parent) do
+    def handle_event({:notify_test, _}, state) do
       Logger.info "Notify api test success"
-      { :ok, parent }
+      {:ok, state}
+    end
+
+    def handle_event({:produce_consume_test, event}, state) do
+      BusBar.notify event, "this"
+      Logger.info "Produce consume success"
+      {:ok, state}
     end
   end
 
@@ -33,6 +38,20 @@ defmodule BusBarTest do
       [:some, :data] |> BusBar.notify_to(:notify_test)
     end)
     assert log =~ ~r/Notify api test success/
+  end
+
+  test "#notify doesn't block when nested" do
+    BusBar.notify :produce_consume_test, :notify_test
+    BusBar.notify :produce_consume_test, :not_notify_test
+  end
+
+  test "#notify doesn't block when no matching event" do
+    BusBar.notify :not_notify_test, [:some, :data]
+  end
+
+  @tag :skip
+  test "#sync_notify doesn't block when no matching event" do
+    BusBar.sync_notify :not_notify_test, [:some, :data]
   end
 
   test "#listeners" do

@@ -1,6 +1,6 @@
 defmodule BusBar do
   @moduledoc """
-  BusBar receives events and dispatches them to listeners via GenEvent.
+  BusBar receives events and dispatches them to listeners.
   """
 
   use Application
@@ -9,7 +9,7 @@ defmodule BusBar do
   Attach a listener to the bus.
   """
   def attach(listener) do
-    BusBar.EventOverseer.monitor listener
+    BusBar.EventManager.attach listener
   end
 
   @doc """
@@ -46,8 +46,8 @@ defmodule BusBar do
   end
 
   @doc """
-  Notify the bus of an event with data, and waituntil all handlers have
-  processed the event.
+  Notify the bus of an event with data, and wait until all handlers have
+  processed the event
   """
   def sync_notify(event, data) do
     BusBar.EventManager.sync_notify(event, data)

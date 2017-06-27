@@ -1,36 +1,46 @@
 defmodule BusBar.EventManager do
   @moduledoc """
-  The EventManager module manages GenEvent for BusBar consumers.
+  The EventManager module manages events for BusBar consumers.
   """
 
   require Logger
 
-  def start_link do
-    GenEvent.start_link([name: :bus_bar_events])
-  end
+  alias BusBar.EventHandler
+  alias BusBar.Supervisor
 
-  def notify(event, data \\ nil) do
-    Logger.debug "BusBar NOTIFY #{event}"
-    :ok = GenEvent.ack_notify(:bus_bar_events, {event, data})
+  def start_link do
+    {:ok, self()}
   end
 
   def attach(listener) do
     Logger.debug "BusBar ATTACH #{listener}"
-    :ok = GenEvent.add_mon_handler(:bus_bar_events, listener, [])
+    {:ok, _pid} = Supervisor.add(EventHandler, [listener], id: listener)
   end
 
   def detach(listener) do
     Logger.debug "BusBar DETACH #{listener}"
-    GenEvent.remove_handler(:bus_bar_events, listener, [])
+    :ok = Supervisor.remove listener
   end
 
   def listeners do
-    GenEvent.which_handlers :bus_bar_events
+    Supervisor.children
+    |> Enum.map(fn({id, _pid, _status, [_event_handler]}) -> id end)
+  end
+
+  def notify(event, data \\ nil) do
+    Logger.debug "BusBar NOTIFY #{event}"
+    for {_, pid, _, _} <- Supervisor.children do
+      GenServer.cast(pid, {event, data})
+    end
+    :ok
   end
 
   def sync_notify(event, data) do
     Logger.debug "BusBar SYNC NOTIFY #{event}"
-    :ok = GenEvent.sync_notify(:bus_bar_events, {event, data})
+    for {_, pid, _, [_handler]} <- Supervisor.children do
+      GenServer.call(pid, {event, data})
+    end
+    :ok
   end
 
 end

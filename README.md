@@ -7,12 +7,11 @@ Simple event bus for elixir.
 
 ```Elixir
 module MyListener do
-  use GenEvent
   require Logger
 
-  def handle_event({:some_event, message }, parent) do
+  def handle_event({:some_event, message }, state) do
     Logger.info "Notified of #{message}"
-    { :ok, parent }
+    { :ok, state }
   end
 end
 
