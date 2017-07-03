@@ -23,7 +23,13 @@ defmodule BusBar.EventManager do
     :ok = Supervisor.remove listener
   end
 
-  def listeners do
+  def listeners(_ \\ [])
+  def listeners(with_pids: true) do
+    Supervisor.children
+    |> Enum.map(fn({id, pid, _status, [_event_handler]}) -> {id, pid} end)
+  end
+
+  def listeners(_) do
     Supervisor.children
     |> Enum.map(fn({id, _pid, _status, [_event_handler]}) -> id end)
   end

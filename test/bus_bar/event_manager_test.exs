@@ -45,6 +45,13 @@ defmodule BusBar.EventManagerTest do
     :ok = BusBarSuper.remove TestHandler
   end
 
+  test "listeners(with_pids: true) will return handlers with pids" do
+    {:ok, pid} = BusBarSuper.add EventHandler, [TestHandler], id: TestHandler
+    assert BusBar.EventManager.listeners(with_pids: true) ==
+      [{TestHandler, pid}]
+    :ok = BusBarSuper.remove TestHandler
+  end
+
   test "#notify will call handle_event on all listeners" do
     {:ok, _} = BusBarSuper.add EventHandler, [TestHandler], id: :test
     {:ok, _} = BusBarSuper.add EventHandler, [OtherTestHandler], id: :other

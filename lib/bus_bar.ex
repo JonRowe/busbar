@@ -22,8 +22,8 @@ defmodule BusBar do
   @doc """
   Returns a list of currently attached listeners.
   """
-  def listeners do
-    BusBar.EventManager.listeners
+  def listeners(opts \\ []) do
+    BusBar.EventManager.listeners(opts)
   end
 
   @doc """
