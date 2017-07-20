@@ -2,19 +2,14 @@ defmodule BusBarTest do
   use ExUnit.Case
   doctest BusBar
 
-  import ExUnit.CaptureLog
-
   defmodule TestHandler do
-    require Logger
-
-    def handle_event({:notify_test, _}, state) do
-      Logger.info "Notify api test success"
+    def handle_event({:produce_consume_test, {event, pid}}, state) do
+      BusBar.notify event, pid
       {:ok, state}
     end
 
-    def handle_event({:produce_consume_test, event}, state) do
-      BusBar.notify event, "this"
-      Logger.info "Produce consume success"
+    def handle_event({:notify_test, pid}, state) do
+      send(pid, :notify_test)
       {:ok, state}
     end
   end
@@ -27,30 +22,29 @@ defmodule BusBarTest do
   end
 
   test "#notify" do
-    log = capture_log(fn ->
-      BusBar.notify :notify_test, [:some, :data]
-    end)
-    assert log =~ ~r/Notify api test success/
+    BusBar.notify :notify_test, self()
+    assert_receive :notify_test
   end
 
   test "#notify_to" do
-    log = capture_log(fn ->
-      [:some, :data] |> BusBar.notify_to(:notify_test)
-    end)
-    assert log =~ ~r/Notify api test success/
+    self() |> BusBar.notify_to(:notify_test)
+    assert_receive :notify_test
   end
 
   test "#notify doesn't block when nested" do
-    BusBar.notify :produce_consume_test, :notify_test
-    BusBar.notify :produce_consume_test, :not_notify_test
+    BusBar.notify :produce_consume_test, {:notify_test, self()}
+    BusBar.notify :produce_consume_test, {:not_notify_test, self()}
+    assert_receive :notify_test
   end
 
   test "#notify doesn't block when no matching event" do
-    BusBar.notify :not_notify_test, [:some, :data]
+    BusBar.notify :not_notify_test, self()
+    refute_received :not_notify_test
   end
 
   test "#sync_notify doesn't block when no matching event" do
-    BusBar.sync_notify :not_notify_test, [:some, :data]
+    BusBar.sync_notify :not_notify_test, self()
+    refute_received :not_notify_test
   end
 
   test "#listeners" do

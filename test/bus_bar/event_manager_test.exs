@@ -6,8 +6,6 @@ defmodule BusBar.EventManagerTest do
   alias BusBar.Supervisor, as: BusBarSuper
 
   defmodule TestHandler do
-    require Logger
-
     def handle_event({event, {data, pid}}, parent) do
       send(pid, {event, data})
       { :ok, parent }
