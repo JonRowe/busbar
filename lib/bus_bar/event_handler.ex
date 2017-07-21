@@ -16,9 +16,12 @@ defmodule BusBar.EventHandler do
     {:ok, handler}
   end
 
-  def handle_call(message, _from, handler) do
-    handle_event(handler, message)
-    {:reply, :ok, handler}
+  def handle_call(message, from, handler) do
+    spawn_link fn ->
+      result = handle_event(handler, message)
+      GenServer.reply(from, result)
+    end
+    {:noreply, handler}
   end
 
   def handle_cast(message, handler) do
