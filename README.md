@@ -6,7 +6,7 @@ Simple event bus for elixir.
 ## Usage
 
 ```Elixir
-module MyListener do
+defmodule MyListener do
   require Logger
 
   def handle_event({:some_event, message }, state) do
