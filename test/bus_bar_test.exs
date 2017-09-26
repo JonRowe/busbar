@@ -14,7 +14,7 @@ defmodule BusBarTest do
     end
 
     def handle_event({:long_notify_test, pid}, state) do
-      Process.sleep 200
+      sleep 200
       send(pid, :long_notify_test)
       {:ok, state}
     end
@@ -22,6 +22,12 @@ defmodule BusBarTest do
     def handle_event({:sync_notify_test, pid}, state) do
       send(pid, :sync_notify_test)
       {:ok, state}
+    end
+
+    def sleep(timeout)
+      when is_integer(timeout) and timeout >= 0
+      when timeout == :infinity do
+        receive after: (timeout -> :ok)
     end
   end
 
