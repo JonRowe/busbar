@@ -44,8 +44,8 @@ defmodule BusBar.EventHandler do
   end
 
   defp handle_error(handler, e) do
-    Logger.error "Error occured in #{handler}, #{inspect e}"
-    Logger.debug inspect System.stacktrace()
+    Logger.error "Error occured in #{handler}, #{inspect e} \n" <>
+                 inspect System.stacktrace()
     {:error, e}
   end
 end
