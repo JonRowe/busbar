@@ -3,8 +3,6 @@ defmodule BusBar.Test do
   BusBar.Test mimics BusBar but always sends synchronously.
   """
 
-  use Application
-
   @doc """
   Attach a listener to the bus.
   """

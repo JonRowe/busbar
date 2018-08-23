@@ -29,6 +29,8 @@ defmodule BusBar.EventHandler do
     {:noreply, handler}
   end
 
+  def handle_info(_message, state), do: {:noreply, state}
+
   def terminate(:normal, _handler), do: :ok
   def terminate(reason, handler) do
     Logger.info "Terminating #{handler} due to #{inspect reason}."
@@ -44,8 +46,7 @@ defmodule BusBar.EventHandler do
   end
 
   defp handle_error(handler, e) do
-    Logger.error "Error occured in #{handler}, #{inspect e} \n" <>
-                 inspect System.stacktrace()
+    Logger.error "Error occured in #{handler}, #{inspect e} \n"
     {:error, e}
   end
 end
