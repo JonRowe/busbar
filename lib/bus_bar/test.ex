@@ -6,12 +6,12 @@ defmodule BusBar.Test do
   @doc """
   Attach a listener to the bus.
   """
-  def attach(listener), do: BusBar.attach listener
+  def attach(listener), do: BusBar.attach(listener)
 
   @doc """
   Detach a listener from the bus.
   """
-  def detach(listener), do: BusBar.detach listener
+  def detach(listener), do: BusBar.detach(listener)
 
   @doc """
   Returns a list of currently attached listeners.
@@ -21,7 +21,7 @@ defmodule BusBar.Test do
   @doc """
   Notify the bus of an event with data.
   """
-  def notify(event, data), do: BusBar.sync_notify event, data
+  def notify(event, data), do: BusBar.sync_notify(event, data)
 
   @doc """
   Notification for use in pipelines.
@@ -31,7 +31,7 @@ defmodule BusBar.Test do
   |> process_data
   |> BusBar.notify_to :some_event
   """
-  def notify_to(data, event), do: BusBar.sync_notify event, data
+  def notify_to(data, event), do: BusBar.sync_notify(event, data)
 
   @doc """
   Notify the bus of an event with data, and wait until all handlers have

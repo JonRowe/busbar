@@ -6,7 +6,7 @@ defmodule BusBar.Supervisor do
   use Supervisor
 
   def start_link do
-    Supervisor.start_link(__MODULE__, [], [name: :bus_bar_supervisor])
+    Supervisor.start_link(__MODULE__, [], name: :bus_bar_supervisor)
   end
 
   def init(_) do
@@ -27,5 +27,4 @@ defmodule BusBar.Supervisor do
     :ok = Supervisor.terminate_child(:bus_bar_supervisor, child)
     :ok = Supervisor.delete_child(:bus_bar_supervisor, child)
   end
-
 end

@@ -17,10 +17,11 @@ defmodule BusBar.EventHandler do
   end
 
   def handle_call(message, from, handler) do
-    spawn_link fn ->
+    spawn_link(fn ->
       result = handle_event(handler, message)
       GenServer.reply(from, result)
-    end
+    end)
+
     {:noreply, handler}
   end
 
@@ -32,8 +33,9 @@ defmodule BusBar.EventHandler do
   def handle_info(_message, state), do: {:noreply, state}
 
   def terminate(:normal, _handler), do: :ok
+
   def terminate(reason, handler) do
-    Logger.info "Terminating #{handler} due to #{inspect reason}."
+    Logger.info("Terminating #{handler} due to #{inspect(reason)}.")
     :ok
   end
 
@@ -46,7 +48,7 @@ defmodule BusBar.EventHandler do
   end
 
   defp handle_error(handler, e) do
-    Logger.error "Error occured in #{handler}, #{inspect e} \n"
+    Logger.error("Error occured in #{handler}, #{inspect(e)} \n")
     {:error, e}
   end
 end
